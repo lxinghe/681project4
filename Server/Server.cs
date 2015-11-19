@@ -55,19 +55,27 @@ namespace Project4
     string address { get; set; } = "localhost";
     string port { get; set; } = "8080";
 	private DBEngine<int, DBElement<int, string>> db = new DBEngine<int, DBElement<int, string>>();
-	//private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
+    //private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
 
-    //----< quick way to grab ports and addresses from commandline >-----
-	
-	public void addValue(int key)
+        //----< quick way to grab ports and addresses from commandline >-----
+
+    public void addValue(int key, XDocument message)//method used to do addition of key/value pairs
 	{
+	  XElement element = message.Element("Message").Element("Name");
 	  DBElement<int, string> elem = new DBElement<int, string>();
-      elem.name = "element";
-      elem.descr = "test element";
-      elem.timeStamp = DateTime.Now;
-      elem.children.AddRange(new List<int>{ 1, 2, 3 });
-      elem.payload = "elem's payload";
-      //elem.showElement();
+      elem.name = element.Value;//add name
+	  element = message.Element("Message").Element("descr");//add description
+      elem.descr = element.Value;
+      elem.timeStamp = DateTime.Now;//add time
+	  var p = from x in 
+                message.Elements("Message")
+                .Elements("Children").Descendants()
+              select x;
+	  foreach (var child in p)//add children's keys
+		elem.children.Add(Int32.Parse(child.Value));
+	  element = message.Element("Message").Element("Payload");//add payload
+      elem.payload = element.Value;
+      elem.showElement();
       db.insert(key, elem);
 	  Write("\n\n Show key/value pairs in data base:\n");
       db.showDB();
@@ -115,10 +123,13 @@ namespace Project4
           msg = rcvr.getMessage();   // note use of non-service method to deQ messages
           Console.Write("\n  Received message:");
           Console.Write("\n  sender is {0}", msg.fromUrl);
-          if (msg.content.StartsWith("<"))
+          if (msg.content.StartsWith("<"))//handling regular message
           {
-               XDocument doc2 = XDocument.Parse(msg.content);
-               Write("\n" + doc2.ToString());
+               XDocument xml = XDocument.Parse(msg.content);
+               //Write("\n" + xml.ToString());
+			   XElement element = xml.Element("Message").Element("Type");
+			   if(element.Value.Equals("Add"))
+                      srvr.addValue(1,xml);
           }
 		  
           Console.Write("\n\n"+msg.content+"\n\n");
