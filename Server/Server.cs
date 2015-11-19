@@ -115,10 +115,12 @@ namespace Project4
           msg = rcvr.getMessage();   // note use of non-service method to deQ messages
           Console.Write("\n  Received message:");
           Console.Write("\n  sender is {0}", msg.fromUrl);
-              string str = "<?xml version=\"1.0\"?>" + msg.content;
-            
-              XDocument doc2 = XDocument.Parse(str);
-          Write("\n" + doc2.ToString());
+          if (msg.content.StartsWith("<"))
+          {
+               XDocument doc2 = XDocument.Parse(msg.content);
+               Write("\n" + doc2.ToString());
+          }
+		  
           Console.Write("\n\n"+msg.content+"\n\n");
           
           if (msg.content == "connection start message")

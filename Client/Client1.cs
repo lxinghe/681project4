@@ -110,9 +110,7 @@ namespace Project4
      while (true)
       {
 		counter++;
-        msg.content = elem.OuterXml;
-        //XDocument doc2 = XDocument.Parse(msg.content);
-        //Write("\n" + doc2.ToString());
+        msg.content = "<?xml version=\"1.0\" encoding=\"utf - 8\" standalone=\"yes\"?>" + elem.OuterXml;
         Console.Write("\n  sending {0}", msg.content);
         if (!sndr.sendMessage(msg))
           return;
