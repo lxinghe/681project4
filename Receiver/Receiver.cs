@@ -40,7 +40,7 @@ using System.ServiceModel;
 using System.ServiceModel.Description;
 using System.Threading;
 
-namespace Project4Starter
+namespace Project4
 {
   using Util = Utilities;
 

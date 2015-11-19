@@ -35,8 +35,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Xml;
+using System.Xml.Linq;
+using static System.Console;
 
-namespace Project4Starter
+namespace Project4
 {
   using Util = Utilities;
 
@@ -94,12 +97,22 @@ namespace Project4Starter
         rcvr.shutDown();
         return;
       }
-
-      int numMsgs = 5;
+	  
+	  XmlDocument doc = new XmlDocument();
+      doc.Load("test.xml");
+	  XmlNode elem = doc.DocumentElement.FirstChild;
+	  
+	  
+	  
+      int numMsgs = 1;
       int counter = 0;
-      while (true)
+	  
+     while (true)
       {
-        msg.content = "Message #" + (++counter).ToString();
+		counter++;
+        msg.content = elem.OuterXml;
+        //XDocument doc2 = XDocument.Parse(msg.content);
+        //Write("\n" + doc2.ToString());
         Console.Write("\n  sending {0}", msg.content);
         if (!sndr.sendMessage(msg))
           return;

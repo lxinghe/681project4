@@ -28,7 +28,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.ServiceModel;
 
-namespace Project4Starter
+namespace Project4
 {
   using SWTools;
   using Util = Utilities;

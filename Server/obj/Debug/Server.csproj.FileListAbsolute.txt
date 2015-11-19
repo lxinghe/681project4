@@ -203,3 +203,5 @@ C:\Users\lxinghe\Downloads\CommPrototype\Server\bin\Debug\Utilities.pdb
 C:\Users\lxinghe\Downloads\CommPrototype\Server\bin\Debug\CommService.pdb
 C:\Users\lxinghe\Downloads\CommPrototype\Server\bin\Debug\BlockingQueue.pdb
 C:\Users\lxinghe\Downloads\CommPrototype\Server\obj\Debug\Server.csprojResolveAssemblyReference.cache
+C:\Users\lxinghe\Downloads\CommPrototype\Server\bin\Debug\TestExec.exe
+C:\Users\lxinghe\Downloads\CommPrototype\Server\bin\Debug\TestExec.pdb

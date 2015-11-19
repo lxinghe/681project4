@@ -41,8 +41,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using static System.Console;
+using System.Xml;
+using System.Xml.Linq;
 
-namespace Project4Starter
+
+namespace Project4
 {
   using Util = Utilities;
 
@@ -50,9 +54,26 @@ namespace Project4Starter
   {
     string address { get; set; } = "localhost";
     string port { get; set; } = "8080";
+	private DBEngine<int, DBElement<int, string>> db = new DBEngine<int, DBElement<int, string>>();
+	//private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
 
     //----< quick way to grab ports and addresses from commandline >-----
-
+	
+	public void addValue(int key)
+	{
+	  DBElement<int, string> elem = new DBElement<int, string>();
+      elem.name = "element";
+      elem.descr = "test element";
+      elem.timeStamp = DateTime.Now;
+      elem.children.AddRange(new List<int>{ 1, 2, 3 });
+      elem.payload = "elem's payload";
+      //elem.showElement();
+      db.insert(key, elem);
+	  Write("\n\n Show key/value pairs in data base:\n");
+      db.showDB();
+      WriteLine();
+	}
+	
     public void ProcessCommandLine(string[] args)
     {
       if (args.Length > 0)
@@ -77,23 +98,29 @@ namespace Project4Starter
       Sender sndr = new Sender(Util.makeUrl(srvr.address, srvr.port));
       //Sender sndr = new Sender();
       Receiver rcvr = new Receiver(srvr.port, srvr.address);
-
-      // - serviceAction defines what the server does with received messages
-      // - This serviceAction just announces incoming messages and echos them
-      //   back to the sender.  
-      // - Note that demonstrates sender routing works if you run more than
-      //   one client.
+      //srvr.addValue(2);
+            
+		// - serviceAction defines what the server does with received messages
+		// - This serviceAction just announces incoming messages and echos them
+		//   back to the sender.  
+		// - Note that demonstrates sender routing works if you run more than
+		//   one client.
 
       Action serviceAction = () =>
       {
         Message msg = null;
-        while (true)
+         //doc2;
+          while (true)
         {
           msg = rcvr.getMessage();   // note use of non-service method to deQ messages
           Console.Write("\n  Received message:");
           Console.Write("\n  sender is {0}", msg.fromUrl);
-          Console.Write("\n  content is {0}\n", msg.content);
-
+              string str = "<?xml version=\"1.0\"?>" + msg.content;
+            
+              XDocument doc2 = XDocument.Parse(str);
+          Write("\n" + doc2.ToString());
+          Console.Write("\n\n"+msg.content+"\n\n");
+          
           if (msg.content == "connection start message")
           {
             continue; // don't send back start message
@@ -114,22 +141,23 @@ namespace Project4Starter
           Util.swapUrls(ref msg);
 
 #if (TEST_WPFCLIENT)
-          /////////////////////////////////////////////////
-          // The statements below support testing the
-          // WpfClient as it receives a stream of messages
-          // - for each message received the Server
-          //   sends back 1000 messages
-          //
-          int count = 0;
-          for (int i = 0; i < 1000; ++i)
-          {
-            Message testMsg = new Message();
-            testMsg.toUrl = msg.toUrl;
-            testMsg.fromUrl = msg.fromUrl;
-            testMsg.content = String.Format("test message #{0}", ++count);
-            Console.Write("\n  sending testMsg: {0}", testMsg.content);
-            sndr.sendMessage(testMsg);
-          }
+              /////////////////////////////////////////////////
+              // The statements below support testing the
+              // WpfClient as it receives a stream of messages
+              // - for each message received the Server
+              //   sends back 1000 messages
+              //
+              int count = 0;
+              for (int i = 0; i < 1; ++i)
+              {
+                Message testMsg = new Message();
+                testMsg.toUrl = msg.toUrl;
+                testMsg.fromUrl = msg.fromUrl;
+                testMsg.content = String.Format("test message #{0}", ++count);
+                Console.Write("\n  sending testMsg: {0}", testMsg.content);
+                sndr.sendMessage(testMsg);
+              }
+              
 #else
           /////////////////////////////////////////////////
           // Use the statement below for normal operation

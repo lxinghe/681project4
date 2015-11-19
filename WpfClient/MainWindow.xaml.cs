@@ -45,7 +45,8 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.Threading;
-using Project4Starter;
+using Project4;
+
 
 namespace WpfApplication1
 {

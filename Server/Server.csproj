@@ -54,6 +54,10 @@
       <Project>{e70db46a-48eb-4cc2-a8ca-fb5f5ee5e868}</Project>
       <Name>ICommService</Name>
     </ProjectReference>
+    <ProjectReference Include="..\NoSqlDB\NoSqlDB.csproj">
+      <Project>{82e16b27-0174-499b-bfeb-169fe687efa2}</Project>
+      <Name>NoSqlDB</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Receiver\Receiver.csproj">
       <Project>{df19b5c4-6901-40db-b8e2-66ab614c92d6}</Project>
       <Name>Receiver</Name>

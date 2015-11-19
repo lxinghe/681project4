@@ -26,9 +26,9 @@ using System.Threading.Tasks;
 using System.ServiceModel;
 using System.Runtime.Serialization;
 
-namespace Project4Starter
+namespace Project4
 {
-  [ServiceContract (Namespace ="Project4Starter")]
+  [ServiceContract (Namespace ="Project4")]
   public interface ICommService
   {
     [OperationContract(IsOneWay = true)]

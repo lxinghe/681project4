@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<Client1>
+	<Message>
+		<Type>Add</Type>
+		<Name>23</Name>
+		<descr>what</descr>
+		<Children>
+			<key>24</key>
+			<key>25</key>
+		</Children>
+		<Payload>sdasdadsadasd</Payload>
+	</Message>
+</Client1>

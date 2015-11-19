@@ -44,7 +44,7 @@ using System.Threading.Tasks;
 using System.Threading;
 using System.ServiceModel;
 
-namespace Project4Starter
+namespace Project4
 {
   using Util = Utilities;
 

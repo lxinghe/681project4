@@ -1,0 +1,5 @@
+C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\bin\Debug\TestExec.exe.config
+C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\obj\Debug\TestExec.exe
+C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\obj\Debug\TestExec.pdb
+C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\bin\Debug\TestExec.exe
+C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\bin\Debug\TestExec.pdb

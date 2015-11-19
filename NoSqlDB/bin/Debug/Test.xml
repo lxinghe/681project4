@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<noSqlDb>
+  <keytype>int</keytype>
+  <payloadtype>string</payloadtype>
+  <key>key7</key>
+  <element>
+    <name>newName!!</name>
+    <descr>new description!!</descr>
+    <timeStamp>2015-11-18T11:34:32.0099463-05:00</timeStamp>
+    <children>
+      <key>key8</key>
+      <key>key18</key>
+    </children>
+    <payload>new payload!!</payload>
+  </element>
+  <key>key2</key>
+  <element>
+    <name>newName!!</name>
+    <descr>new description!!</descr>
+    <timeStamp>2015-11-18T11:34:32.0099463-05:00</timeStamp>
+    <children>
+      <key>key8</key>
+      <key>key18</key>
+    </children>
+    <payload>new payload!!</payload>
+  </element>
+</noSqlDb>
