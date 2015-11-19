@@ -59,7 +59,7 @@ namespace Project4
 
         //----< quick way to grab ports and addresses from commandline >-----
 
-    public void addValue(int key, XDocument message)//method used to do addition of key/value pairs
+    public int addValue(XDocument message)//method used to do addition of key/value pairs
 	{
 	  XElement element = message.Element("Message").Element("Name");
 	  DBElement<int, string> elem = new DBElement<int, string>();
@@ -75,12 +75,19 @@ namespace Project4
 		elem.children.Add(Int32.Parse(child.Value));
 	  element = message.Element("Message").Element("Payload");//add payload
       elem.payload = element.Value;
-      elem.showElement();
+      //elem.showElement();
+	  element = message.Element("Message").Element("Key");//add description
+	  int key = Int32.Parse(element.Value);
       db.insert(key, elem);
-	  Write("\n\n Show key/value pairs in data base:\n");
-      db.showDB();
-      WriteLine();
+	  //Write("\n\n Show key/value pairs in data base:\n");
+      //db.showDB();
+      return key;
 	}
+    
+    public void showDB()
+        {
+            db.showDB();
+        }
 	
     public void ProcessCommandLine(string[] args)
     {
@@ -117,23 +124,25 @@ namespace Project4
       Action serviceAction = () =>
       {
         Message msg = null;
-         //doc2;
-          while (true)
+		int key;
+		
+        while (true)
         {
           msg = rcvr.getMessage();   // note use of non-service method to deQ messages
+		  Message testMsg = new Message();
           Console.Write("\n  Received message:");
           Console.Write("\n  sender is {0}", msg.fromUrl);
+		  Console.Write("\n  Content is: {0}", msg.content);
           if (msg.content.StartsWith("<"))//handling regular message
           {
                XDocument xml = XDocument.Parse(msg.content);
-               //Write("\n" + xml.ToString());
 			   XElement element = xml.Element("Message").Element("Type");
-			   if(element.Value.Equals("Add"))
-                      srvr.addValue(1,xml);
+			   if(element.Value.Equals("Add")){
+                      key = srvr.addValue(xml);
+					  testMsg.content = "Value with key "+ key +" has been added";
+			   }
           }
-		  
-          Console.Write("\n\n"+msg.content+"\n\n");
-          
+
           if (msg.content == "connection start message")
           {
             continue; // don't send back start message
@@ -160,16 +169,18 @@ namespace Project4
               // - for each message received the Server
               //   sends back 1000 messages
               //
-              int count = 0;
-              for (int i = 0; i < 1; ++i)
-              {
-                Message testMsg = new Message();
+                /*Message testMsg = new Message();
                 testMsg.toUrl = msg.toUrl;
                 testMsg.fromUrl = msg.fromUrl;
-                testMsg.content = String.Format("test message #{0}", ++count);
-                Console.Write("\n  sending testMsg: {0}", testMsg.content);
-                sndr.sendMessage(testMsg);
-              }
+                testMsg.content = "Item added";
+                Console.Write("\n  sending reply: {0}", testMsg.content);
+                sndr.sendMessage(testMsg);*/
+				
+				testMsg.toUrl = msg.toUrl;
+				testMsg.fromUrl = msg.fromUrl;
+				Console.Write("\n  sending reply: {0}", testMsg.content);
+				WriteLine();
+				sndr.sendMessage(testMsg);
               
 #else
           /////////////////////////////////////////////////
@@ -184,6 +195,8 @@ namespace Project4
         rcvr.doService(serviceAction); // This serviceAction is asynchronous,
       }                                // so the call doesn't block.
       Util.waitForUser(); 
+	  
+	  srvr.showDB();
     }
   }
 }

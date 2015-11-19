@@ -100,22 +100,18 @@ namespace Project4
 	  
 	  XmlDocument doc = new XmlDocument();
       doc.Load("test.xml");
-	  XmlNode elem = doc.DocumentElement.FirstChild;
-	  
-	  
-	  
-      int numMsgs = 1;
-      int counter = 0;
+	  XmlNodeList xmlnode = doc.GetElementsByTagName("Message");
 	  
      while (true)
       {
-		counter++;
-        msg.content = "<?xml version=\"1.0\" encoding=\"utf - 8\" standalone=\"yes\"?>" + elem.OuterXml;
-        Console.Write("\n  sending {0}", msg.content);
-        if (!sndr.sendMessage(msg))
-          return;
-        Thread.Sleep(100);
-        if (counter >= numMsgs)
+		for (int i = 0; i < xmlnode.Count; i++)
+		{
+			msg.content = "<?xml version=\"1.0\" encoding=\"utf - 8\" standalone=\"yes\"?>" + xmlnode[i].OuterXml;
+			Console.Write("\n  sending {0}", msg.content);
+			if (!sndr.sendMessage(msg))
+				return;
+			Thread.Sleep(100);
+		}		
           break;
       }
       msg.content = "done";

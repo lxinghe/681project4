@@ -2,12 +2,35 @@
 <Client1>
 	<Message>
 		<Type>Add</Type>
-		<Name>23</Name>
+		<Key>1</Key>
+		<Name>no1</Name>
 		<descr>what</descr>
 		<Children>
 			<key>24</key>
 			<key>25</key>
 		</Children>
-		<Payload>sdasdadsadasd</Payload>
+		<Payload>msg1</Payload>
+	</Message>
+	<Message>
+		<Type>Add</Type>
+		<Key>2</Key>
+		<Name>no2</Name>
+		<descr>what2</descr>
+		<Children>
+			<key>26</key>
+			<key>76</key>
+		</Children>
+		<Payload>msg2</Payload>
+	</Message>
+	<Message>
+		<Type>Add</Type>
+		<Key>3</Key>
+		<Name>no3</Name>
+		<descr>what3</descr>
+		<Children>
+			<key>32</key>
+			<key>14</key>
+		</Children>
+		<Payload>msg3</Payload>
 	</Message>
 </Client1>
