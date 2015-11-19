@@ -58,7 +58,14 @@ namespace Project4
     //private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
 
         //----< quick way to grab ports and addresses from commandline >-----
-
+	public int deleteData(XDocument message)
+	{
+		XElement element = message.Element("Message").Element("Key");
+		int key = Int32.Parse(element.Value);
+		db.delete(key);
+		return key;
+	}
+	
     public int addValue(XDocument message)//method used to do addition of key/value pairs
 	{
 	  XElement element = message.Element("Message").Element("Name");
@@ -85,9 +92,9 @@ namespace Project4
 	}
     
     public void showDB()
-        {
-            db.showDB();
-        }
+	{
+		db.showDB();
+	}
 	
     public void ProcessCommandLine(string[] args)
     {
@@ -137,9 +144,24 @@ namespace Project4
           {
                XDocument xml = XDocument.Parse(msg.content);
 			   XElement element = xml.Element("Message").Element("Type");
-			   if(element.Value.Equals("Add")){
+			   string type = element.Value;
+			   if(type.Equals("Add")){
                       key = srvr.addValue(xml);
 					  testMsg.content = "Value with key "+ key +" has been added";
+			   }
+			   switch(type)
+			   {
+					case "Add":
+						key = srvr.addValue(xml);
+						testMsg.content = "Value with key "+ key +" has been added";
+						break;
+					case "Delete":
+						key = srvr.deleteData(xml);
+						testMsg.content = "Value with key "+ key +" has been deleted";
+						break;
+					default:
+						Write("");
+						break;
 			   }
           }
 
@@ -169,13 +191,6 @@ namespace Project4
               // - for each message received the Server
               //   sends back 1000 messages
               //
-                /*Message testMsg = new Message();
-                testMsg.toUrl = msg.toUrl;
-                testMsg.fromUrl = msg.fromUrl;
-                testMsg.content = "Item added";
-                Console.Write("\n  sending reply: {0}", testMsg.content);
-                sndr.sendMessage(testMsg);*/
-				
 				testMsg.toUrl = msg.toUrl;
 				testMsg.fromUrl = msg.fromUrl;
 				Console.Write("\n  sending reply: {0}", testMsg.content);

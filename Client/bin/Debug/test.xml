@@ -33,4 +33,8 @@
 		</Children>
 		<Payload>msg3</Payload>
 	</Message>
+	<Message>
+		<Type>Delete</Type>
+		<Key>1</Key>
+	</Message>
 </Client1>
