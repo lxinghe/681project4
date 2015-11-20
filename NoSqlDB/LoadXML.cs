@@ -26,7 +26,7 @@ namespace Project4
 		{
 			db = database;
 			xml = XDocument.Load(path);//read xml
-			Write(xml.ToString()); 
+			//Write(xml.ToString()); 
 		}
 		
 		public void WriteToDBEngine()

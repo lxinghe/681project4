@@ -77,4 +77,16 @@
 		<Key>2</Key>
 		<EditType>replaceWithInstance</EditType>
 	</Message>
+	<Message>
+		<Type>Mistake</Type>
+		<Key>2</Key>
+		<EditType>replaceWithInstance</EditType>
+	</Message>
+	<Message>
+		<Type>ToXML</Type>
+	</Message>
+	<Message>
+		<Type>RecoverDB</Type>
+		<File>ReadFile.xml</File>
+	</Message>
 </Client1>

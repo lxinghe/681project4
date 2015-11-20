@@ -50,7 +50,7 @@ namespace Project4
 					
 					foreach(var i in keys)
 					{
-						db1.getValue(2, out temp);
+						db1.getValue(i, out temp);
 						XElement key = new XElement("key", ("key"+i));
 						noSqlDb.Add(key);//noSqlDb's children
 						XElement element = new XElement("element");

@@ -58,6 +58,22 @@ namespace Project4
     //private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
 
         //----< quick way to grab ports and addresses from commandline >-----
+	public void recoverDB(XDocument message)
+	{
+		XElement element = message.Element("Message").Element("File");
+		LoadXML fromxml = new LoadXML(db, element.Value);
+		fromxml.WriteToDBEngine();
+		//this.showDB();
+	}
+	
+	public void persistDB()
+	{
+		PersistToXML toxml  = new PersistToXML(db);
+		toxml.writeXML("Test.xml");
+		//toxml.displayXML();
+		toxml.cleanDB();
+	}
+	
 	public int editValue(XDocument message)
 	{
 		DBElement<int, string> temp = new DBElement<int, string>();
@@ -210,6 +226,14 @@ namespace Project4
 						else
 							testMsg.content = "Value with key "+ key +" has be edited";
                           break;
+					case "ToXML":
+						srvr.persistDB();
+						testMsg.content = "The content of database has been converted to XML and saved in Test.xml";
+						break;
+					case "RecoverDB":
+						srvr.recoverDB(xml);
+						testMsg.content = "The database has been recover from a XML file";
+						break;
 					default:
 						testMsg.content = "Invalid request.";
 						break;

@@ -3,3 +3,4 @@ C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\obj\Debug\TestExec.exe
 C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\obj\Debug\TestExec.pdb
 C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\bin\Debug\TestExec.exe
 C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\bin\Debug\TestExec.pdb
+C:\Users\lxinghe\Downloads\CommPrototype\NoSqlDB\obj\Debug\NoSqlDB.csprojResolveAssemblyReference.cache
