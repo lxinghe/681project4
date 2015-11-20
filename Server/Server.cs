@@ -61,13 +61,21 @@ namespace Project4
 	public string query(XDocument message)	{
 		string reply;
 		XElement element = message.Element("Message").Element("QueryType");
+		Query<int, int, string> query1 = new Query<int, int, string>(db);
 		switch(element.Value){
 				case "the value of specified key":
 					element = message.Element("Message").Element("Key");
-					Query<int, int, string> query1 = new Query<int, int, string>(db);
 				    DBElement<int, string> elem = new DBElement<int, string>();
 				    query1.checkValueByKey(Int32.Parse(element.Value), out elem);
 					reply = ("the value of specified key " + element.Value + " is\n" + elem.showElement<int, string>());
+					break;
+				case "the children of specified key":
+					element = message.Element("Message").Element("Key");
+				    List<int> children = new List<int>();
+					children = query1.childrenByKey(Int32.Parse(element.Value));
+					reply = ("the children of specified key " + element.Value + " is\n");
+                    foreach (var child in children)
+                        reply += (String.Format("{0}\n", child.ToString()));
 					break;
 				default:
                     reply = ("Invalid editing type.");

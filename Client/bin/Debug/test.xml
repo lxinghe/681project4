@@ -95,4 +95,9 @@
 		<QueryType>the value of specified key</QueryType>
 		<Key>2</Key>
 	</Message>
+	<Message>
+		<Type>Query</Type>
+		<QueryType>the children of specified key</QueryType>
+		<Key>2</Key>
+	</Message>
 </Client1>
