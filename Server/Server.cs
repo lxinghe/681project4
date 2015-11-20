@@ -58,6 +58,55 @@ namespace Project4
     //private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
 
         //----< quick way to grab ports and addresses from commandline >-----
+	public int editValue(XDocument message)
+	{
+		DBElement<int, string> temp = new DBElement<int, string>();
+        XElement element = message.Element("Message").Element("Key");
+        int key = Int32.Parse(element.Value);
+		if(db.containsKey(key)){
+			db.getValue(key, out temp);
+			ItemEditor<int, string> editItem = new ItemEditor<int, string>(temp);
+			element = message.Element("Message").Element("EditType");
+			string str = element.Value;
+			switch(str){
+				case "nameEdit":
+					element = message.Element("Message").Element("NewName");
+					editItem.nameEdit(element.Value);
+					break;
+				case "descrEdit":
+					element = message.Element("Message").Element("NewDescr");
+					editItem.descrEdit(element.Value);
+					break;
+				case "timeUpdate":
+					editItem.dateTimeEdit();
+					break;
+				case "addRelationship":
+					element = message.Element("Message").Element("ChildKey");
+					editItem.addRelationship(Int32.Parse(element.Value));
+					break;
+				case "deleteRelationship":
+					element = message.Element("Message").Element("ChildKey");
+					editItem.deleteRelationship(Int32.Parse(element.Value));
+					break;
+				case "payloadEdit":
+					element = message.Element("Message").Element("NewPayload");
+					editItem.payloadEdit(element.Value);
+					break;
+				case "replaceWithInstance":
+					DBElement<int, string> elemNew = new DBElement<int, string>();
+					editItem.replaceWithInstance(out elemNew);
+					temp = null;
+					break;
+				default:
+					Write("Invalid editing type.");
+					break;
+			}
+		}
+		else
+			key = -1;
+		return key;
+	}
+	
 	public int deleteData(XDocument message)
 	{
 		XElement element = message.Element("Message").Element("Key");
@@ -145,12 +194,7 @@ namespace Project4
                XDocument xml = XDocument.Parse(msg.content);
 			   XElement element = xml.Element("Message").Element("Type");
 			   string type = element.Value;
-			   if(type.Equals("Add")){
-                      key = srvr.addValue(xml);
-					  testMsg.content = "Value with key "+ key +" has been added";
-			   }
-			   switch(type)
-			   {
+			   switch(type){
 					case "Add":
 						key = srvr.addValue(xml);
 						testMsg.content = "Value with key "+ key +" has been added";
@@ -159,8 +203,15 @@ namespace Project4
 						key = srvr.deleteData(xml);
 						testMsg.content = "Value with key "+ key +" has been deleted";
 						break;
+					case "Edit":
+						key = srvr.editValue(xml);
+						if(key<0)
+							testMsg.content = "Value cannot be found";
+						else
+							testMsg.content = "Value with key "+ key +" has be edited";
+                          break;
 					default:
-						Write("");
+						testMsg.content = "Invalid request.";
 						break;
 			   }
           }

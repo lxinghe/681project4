@@ -37,4 +37,44 @@
 		<Type>Delete</Type>
 		<Key>1</Key>
 	</Message>
+	<Message>
+		<Type>Edit</Type>
+		<Key>2</Key>
+		<EditType>nameEdit</EditType>
+		<NewName>new Name!</NewName>
+	</Message>
+	<Message>
+		<Type>Edit</Type>
+		<Key>2</Key>
+		<EditType>descrEdit</EditType>
+		<NewDescr>new descr!</NewDescr>
+	</Message>
+	<Message>
+		<Type>Edit</Type>
+		<Key>2</Key>
+		<EditType>timeUpdate</EditType>
+	</Message>
+	<Message>
+		<Type>Edit</Type>
+		<Key>2</Key>
+		<EditType>addRelationship</EditType>
+		<ChildKey>56</ChildKey>
+	</Message>
+	<Message>
+		<Type>Edit</Type>
+		<Key>2</Key>
+		<EditType>deleteRelationship</EditType>
+		<ChildKey>26</ChildKey>
+	</Message>
+	<Message>
+		<Type>Edit</Type>
+		<Key>2</Key>
+		<EditType>payloadEdit</EditType>
+		<NewPayload>new payload!</NewPayload>
+	</Message>
+	<Message>
+		<Type>Edit</Type>
+		<Key>2</Key>
+		<EditType>replaceWithInstance</EditType>
+	</Message>
 </Client1>
