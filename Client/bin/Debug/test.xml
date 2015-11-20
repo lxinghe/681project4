@@ -84,9 +84,15 @@
 	</Message>
 	<Message>
 		<Type>ToXML</Type>
+		<File>Test.xml</File>
 	</Message>
 	<Message>
 		<Type>RecoverDB</Type>
 		<File>ReadFile.xml</File>
+	</Message>
+	<Message>
+		<Type>Query</Type>
+		<QueryType>the value of specified key</QueryType>
+		<Key>2</Key>
 	</Message>
 </Client1>

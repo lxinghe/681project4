@@ -57,25 +57,40 @@ namespace Project4
 	private DBEngine<int, DBElement<int, string>> db = new DBEngine<int, DBElement<int, string>>();
     //private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
 
-        //----< quick way to grab ports and addresses from commandline >-----
-	public void recoverDB(XDocument message)
-	{
+        
+	public string query(XDocument message)	{
+		string reply;
+		XElement element = message.Element("Message").Element("QueryType");
+		switch(element.Value){
+				case "the value of specified key":
+					element = message.Element("Message").Element("Key");
+					Query<int, int, string> query1 = new Query<int, int, string>(db);
+				    DBElement<int, string> elem = new DBElement<int, string>();
+				    query1.checkValueByKey(Int32.Parse(element.Value), out elem);
+					reply = ("the value of specified key " + element.Value + " is\n" + elem.showElement<int, string>());
+					break;
+				default:
+                    reply = ("Invalid editing type.");
+					break;
+			}
+		return reply;
+	}
+	
+	public void recoverDB(XDocument message){
 		XElement element = message.Element("Message").Element("File");
 		LoadXML fromxml = new LoadXML(db, element.Value);
 		fromxml.WriteToDBEngine();
-		//this.showDB();
 	}
 	
-	public void persistDB()
-	{
+	public void persistDB(XDocument message){
+		XElement element = message.Element("Message").Element("File");
 		PersistToXML toxml  = new PersistToXML(db);
-		toxml.writeXML("Test.xml");
+		toxml.writeXML(element.Value);
 		//toxml.displayXML();
 		toxml.cleanDB();
 	}
 	
-	public int editValue(XDocument message)
-	{
+	public int editValue(XDocument message){
 		DBElement<int, string> temp = new DBElement<int, string>();
         XElement element = message.Element("Message").Element("Key");
         int key = Int32.Parse(element.Value);
@@ -83,8 +98,7 @@ namespace Project4
 			db.getValue(key, out temp);
 			ItemEditor<int, string> editItem = new ItemEditor<int, string>(temp);
 			element = message.Element("Message").Element("EditType");
-			string str = element.Value;
-			switch(str){
+			switch(element.Value){
 				case "nameEdit":
 					element = message.Element("Message").Element("NewName");
 					editItem.nameEdit(element.Value);
@@ -160,7 +174,7 @@ namespace Project4
 	{
 		db.showDB();
 	}
-	
+	//----< quick way to grab ports and addresses from commandline >-----
     public void ProcessCommandLine(string[] args)
     {
       if (args.Length > 0)
@@ -209,8 +223,7 @@ namespace Project4
           {
                XDocument xml = XDocument.Parse(msg.content);
 			   XElement element = xml.Element("Message").Element("Type");
-			   string type = element.Value;
-			   switch(type){
+			   switch(element.Value){
 					case "Add":
 						key = srvr.addValue(xml);
 						testMsg.content = "Value with key "+ key +" has been added";
@@ -227,12 +240,15 @@ namespace Project4
 							testMsg.content = "Value with key "+ key +" has be edited";
                           break;
 					case "ToXML":
-						srvr.persistDB();
+						srvr.persistDB(xml);
 						testMsg.content = "The content of database has been converted to XML and saved in Test.xml";
 						break;
 					case "RecoverDB":
 						srvr.recoverDB(xml);
 						testMsg.content = "The database has been recover from a XML file";
+						break;
+					case "Query":
+						testMsg.content = srvr.query(xml);
 						break;
 					default:
 						testMsg.content = "Invalid request.";
