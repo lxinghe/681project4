@@ -5,7 +5,7 @@
   <key>key7</key>
   <element>
     <name>#1</name>
-    <descr>i'm the one</descr>
+    <descr>i'm the #1</descr>
     <timeStamp>2015-10-07T13:10:29.1614395-04:00</timeStamp>
     <children>
       <key>key8</key>
@@ -16,7 +16,7 @@
   <key>key2</key>
   <element>
     <name>#2</name>
-    <descr> hate #1!!</descr>
+    <descr>i hate #1!!</descr>
     <timeStamp>2015-10-07T13:10:29.1614395-04:00</timeStamp>
     <children>
       <key>key38</key>

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Client1>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Add</Type>
 		<Key>1</Key>
 		<Name>no1</Name>
@@ -12,6 +13,7 @@
 		<Payload>msg1</Payload>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Add</Type>
 		<Key>2</Key>
 		<Name>no2</Name>
@@ -23,6 +25,7 @@
 		<Payload>msg2</Payload>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Add</Type>
 		<Key>3</Key>
 		<Name>no3</Name>
@@ -34,70 +37,148 @@
 		<Payload>msg3</Payload>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Delete</Type>
 		<Key>1</Key>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Edit</Type>
 		<Key>2</Key>
 		<EditType>nameEdit</EditType>
 		<NewName>new Name!</NewName>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Edit</Type>
 		<Key>2</Key>
 		<EditType>descrEdit</EditType>
 		<NewDescr>new descr!</NewDescr>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Edit</Type>
 		<Key>2</Key>
 		<EditType>timeUpdate</EditType>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Edit</Type>
 		<Key>2</Key>
 		<EditType>addRelationship</EditType>
 		<ChildKey>56</ChildKey>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Edit</Type>
 		<Key>2</Key>
 		<EditType>deleteRelationship</EditType>
 		<ChildKey>26</ChildKey>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Edit</Type>
 		<Key>2</Key>
 		<EditType>payloadEdit</EditType>
 		<NewPayload>new payload!</NewPayload>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Edit</Type>
 		<Key>2</Key>
 		<EditType>replaceWithInstance</EditType>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Mistake</Type>
 		<Key>2</Key>
 		<EditType>replaceWithInstance</EditType>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>ToXML</Type>
 		<File>Test.xml</File>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>RecoverDB</Type>
 		<File>ReadFile.xml</File>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Query</Type>
 		<QueryType>the value of specified key</QueryType>
 		<Key>2</Key>
 	</Message>
 	<Message>
+		<KeyType>int</KeyType>
 		<Type>Query</Type>
 		<QueryType>the children of specified key</QueryType>
 		<Key>2</Key>
+	</Message>
+	<Message>
+		<KeyType>string</KeyType>
+		<Type>Add</Type>
+		<Key>SU cs dep</Key>
+		<Name>r701</Name>
+		<descr>su cs</descr>
+		<Children>
+			<key>24</key>
+			<key>25</key>
+		</Children>
+		<Payload>cs</Payload>
+	</Message>
+	<Message>
+		<KeyType>string</KeyType>
+		<Type>Add</Type>
+		<Key>SU math dep</Key>
+		<Name>r702</Name>
+		<descr>su math</descr>
+		<Children>
+			<key>4</key>
+			<key>5</key>
+		</Children>
+		<Payload>math</Payload>
+	</Message>
+	<Message>
+		<KeyType>string</KeyType>
+		<Type>Add</Type>
+		<Key>CORNELL math dep</Key>
+		<Name>r703</Name>
+		<descr>cornell math</descr>
+		<Children>
+			<key>43</key>
+			<key>54</key>
+		</Children>
+		<Payload>math</Payload>
+	</Message>
+	<Message>
+		<KeyType>string</KeyType>
+		<Type>Query</Type>
+		<QueryType>the keys share a same pattern</QueryType>
+		<Pattern>SU</Pattern>
+	</Message>
+	<Message>
+		<KeyType>int</KeyType>
+		<Type>Query</Type>
+		<QueryType>the keys share same pattern in their metadata</QueryType>
+		<Pattern>#1</Pattern>
+	</Message>
+	<Message>
+		<KeyType>int</KeyType>
+		<Type>Query</Type>
+		<QueryType>the keys of value created in the same time interval</QueryType>
+		<Year1>1990</Year1>
+		<Month1>4</Month1>
+		<Date1>15</Date1>
+		<Hour1>5</Hour1>
+		<Min1>9</Min1>
+		<Sec1>05</Sec1>
+		<Year2>2015</Year2>
+		<Month2>12</Month2>
+		<Date2>25</Date2>
+		<Hour2>5</Hour2>
+		<Min2>9</Min2>
+		<Sec2>05</Sec2>
 	</Message>
 </Client1>

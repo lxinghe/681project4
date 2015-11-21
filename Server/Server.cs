@@ -55,11 +55,13 @@ namespace Project4
     string address { get; set; } = "localhost";
     string port { get; set; } = "8080";
 	private DBEngine<int, DBElement<int, string>> db = new DBEngine<int, DBElement<int, string>>();
+	private DBEngine<string, DBElement<int, string>> dbString = new DBEngine<string, DBElement<int, string>>();
     //private DBEngine<int, DBElement<int, List<int>>> keysFromQuery = new DBEngine<int, DBElement<int, List<int>>>();
 
         
-	public string query(XDocument message)	{
+	public string query(XDocument message)	{//method used to handle queries
 		string reply;
+		List<int> children = new List<int>();
 		XElement element = message.Element("Message").Element("QueryType");
 		Query<int, int, string> query1 = new Query<int, int, string>(db);
 		switch(element.Value){
@@ -67,15 +69,35 @@ namespace Project4
 					element = message.Element("Message").Element("Key");
 				    DBElement<int, string> elem = new DBElement<int, string>();
 				    query1.checkValueByKey(Int32.Parse(element.Value), out elem);
-					reply = ("the value of specified key " + element.Value + " is\n" + elem.showElement<int, string>());
+					reply = ("The value of specified key " + element.Value + " is\n" + elem.showElement<int, string>());
 					break;
 				case "the children of specified key":
 					element = message.Element("Message").Element("Key");
-				    List<int> children = new List<int>();
 					children = query1.childrenByKey(Int32.Parse(element.Value));
-					reply = ("the children of specified key " + element.Value + " is\n");
-                    foreach (var child in children)
-                        reply += (String.Format("{0}\n", child.ToString()));
+					reply = ("The children of specified key " + element.Value + " is\n");
+					reply = this.addChildToStr(children, reply);
+					break;
+				case "the keys share a same pattern":
+					element = message.Element("Message").Element("Pattern");
+					Query<string, int, string> queryString = new Query<string, int, string>(dbString);
+					List<string> keyString = new List<string>();
+					keyString = queryString.keysWithPattern(dbString,element.Value);
+					reply = ("The keys share a same pattern \"" + element.Value + "\" is\n");
+					foreach(var key in keyString)
+						reply += (String.Format("{0}\n", key.ToString()));
+					break;
+				case "the keys share same pattern in their metadata":
+					element = message.Element("Message").Element("Pattern");
+					children = query1.keysSameMdataPattern(element.Value);
+					reply = ("The keys share same pattern " + element.Value + " is\n");
+					reply = this.addChildToStr(children, reply);
+					break;
+				case "the keys of value created in the same time interval":
+					List<DateTime> dts = new List<DateTime>();
+					dts = this.getDTS(message);
+					children = query1.keysSameTinterval(dts[0], dts[1]);
+					reply = ("The keys of value created in the same time interval between " + dts[0].ToString() + " and " + dts[1]).ToString()+"\n";
+					reply = this.addChildToStr(children, reply);
 					break;
 				default:
                     reply = ("Invalid editing type.");
@@ -84,13 +106,56 @@ namespace Project4
 		return reply;
 	}
 	
-	public void recoverDB(XDocument message){
+	public List<DateTime> getDTS(XDocument mesg){
+		List<DateTime> dts = new List<DateTime>();
+		int year, month, date, hour, min, sec;
+		XElement element = mesg.Element("Message").Element("Year1");
+		year = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Month1");
+		month = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Date1");
+		date = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Hour1");
+		hour = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Min1");
+		min = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Sec1");
+		sec = Int32.Parse(element.Value);
+		DateTime dt1 = new DateTime(year, month, date, hour, min, sec);
+		dts.Add(dt1);//add datetime #1
+		element = mesg.Element("Message").Element("Year2");
+		year = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Month2");
+		month = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Date2");
+		date = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Hour2");
+		hour = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Min2");
+		min = Int32.Parse(element.Value);
+		element = mesg.Element("Message").Element("Sec2");
+		sec = Int32.Parse(element.Value);
+		DateTime dt2 = new DateTime(year, month, date, hour, min, sec);
+		dts.Add(dt2);//add datetime #1
+		return dts;
+	}
+	
+	public string addChildToStr(List<int> list, string str){
+		string astr = str;
+		List<int> children = new List<int>();
+        children = list;
+		foreach (var child in children)
+          astr += (String.Format("{0}\n", child.ToString()));
+		return astr;
+	}
+	
+	public void recoverDB(XDocument message){//method used to recover a db from a xml file
 		XElement element = message.Element("Message").Element("File");
 		LoadXML fromxml = new LoadXML(db, element.Value);
 		fromxml.WriteToDBEngine();
 	}
 	
-	public void persistDB(XDocument message){
+	public void persistDB(XDocument message){//method used to persist a database to xml file
 		XElement element = message.Element("Message").Element("File");
 		PersistToXML toxml  = new PersistToXML(db);
 		toxml.writeXML(element.Value);
@@ -98,7 +163,7 @@ namespace Project4
 		toxml.cleanDB();
 	}
 	
-	public int editValue(XDocument message){
+	public int editValue(XDocument message){//method used to do value edition
 		DBElement<int, string> temp = new DBElement<int, string>();
         XElement element = message.Element("Message").Element("Key");
         int key = Int32.Parse(element.Value);
@@ -145,7 +210,7 @@ namespace Project4
 		return key;
 	}
 	
-	public int deleteData(XDocument message)
+	public int deleteData(XDocument message)//method used to do value deletion
 	{
 		XElement element = message.Element("Message").Element("Key");
 		int key = Int32.Parse(element.Value);
@@ -169,12 +234,17 @@ namespace Project4
 		elem.children.Add(Int32.Parse(child.Value));
 	  element = message.Element("Message").Element("Payload");//add payload
       elem.payload = element.Value;
-      //elem.showElement();
-	  element = message.Element("Message").Element("Key");//add description
-	  int key = Int32.Parse(element.Value);
-      db.insert(key, elem);
-	  //Write("\n\n Show key/value pairs in data base:\n");
-      //db.showDB();
+	  element = message.Element("Message").Element("KeyType");
+	  int key = -1;
+	  if(element.Value.Equals("int")){
+		  element = message.Element("Message").Element("Key");
+		  key = Int32.Parse(element.Value);
+		  db.insert(key, elem);
+	  }
+	  else{
+		element = message.Element("Message").Element("Key");
+		dbString.insert(element.Value, elem);
+	  }
       return key;
 	}
     
@@ -234,7 +304,12 @@ namespace Project4
 			   switch(element.Value){
 					case "Add":
 						key = srvr.addValue(xml);
-						testMsg.content = "Value with key "+ key +" has been added";
+						if(key>=0)
+							testMsg.content = "Value with key "+ key +" has been added";
+						else{
+							element = xml.Element("Message").Element("Key");
+							testMsg.content = "Value with key "+ element.Value +" has been added";
+						}
 						break;
 					case "Delete":
 						key = srvr.deleteData(xml);
@@ -294,7 +369,7 @@ namespace Project4
 				testMsg.fromUrl = msg.fromUrl;
 				Console.Write("\n  sending reply: {0}", testMsg.content);
 				WriteLine();
-				sndr.sendMessage(testMsg);
+				sndr.sendMessage(testMsg);//sending replies 
               
 #else
           /////////////////////////////////////////////////
