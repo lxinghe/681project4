@@ -1,17 +1,7 @@
-﻿/////////////////////////////////////////////////////////////////////////
-// SimpleServer.cs - Very simple server - good starting point for      //
-// ver 1.0           Project #4 database server.                       //
-//                                                                     //
-// Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4    //
-/////////////////////////////////////////////////////////////////////////
+﻿
 /*
- * Purpose:
- *----------
- * This is an unadorned server - easy to understand and build upon.
- * Note: has fixed listen port = 8079
- *
- * Additions to C# Console Wizard generated code:
- * - references to ICommService, Sender, Receiver, and Utilities
+ By Xinghe Lu
+ Original file from Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4
  */
 /*
  * Maintenance History:

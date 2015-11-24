@@ -3,6 +3,7 @@
 // ver 1.1                                                             //
 // Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4    //
 /////////////////////////////////////////////////////////////////////////
+//Modified by XINGHE LU
 /*
  * Additions to the C# Console Wizard code:
  * - added reference to System.ServiceModel

@@ -1,13 +1,8 @@
-﻿/////////////////////////////////////////////////////////////////////////
-// Receiver.cs - CommService Receiver listens for messages             //
-// ver 2.1                                                             //
-// Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4    //
-/////////////////////////////////////////////////////////////////////////
+﻿
 /*
- * Receiver:
- * - listens for incoming connection requests
- * - provides sendMessage() for Senders to post messages
- * - provides serviceAction to determine what happens to received messages
+ Developed by Xinghe Lu
+ Date 11/23
+ Original files from Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4
  */
 /*
  * Additions to C# Console Wizard generated code:
@@ -129,6 +124,27 @@ namespace Project4
           Console.Write("\n  Received message:");
           Console.Write("\n  sender is {0}", msg.fromUrl);
           Console.Write("\n  content is {0}\n", msg.content);
+          serverProcessMessage(msg);
+          if (msg.content == "closeReceiver")
+            break;
+        }
+      };
+      return serviceAction;
+    }
+	
+	public Action defaultServiceAction2()
+    {
+      Action serviceAction = () =>
+      {
+        if(Util.verbose)
+          Console.Write("\n  starting Receiver.defaultServiceAction");
+        Message msg = null;
+        while (true)
+        {
+          msg = getMessage();   // note use of non-service method to deQ messages
+          //Console.Write("\n  Received message:");
+          //Console.Write("\n  sender is {0}", msg.fromUrl);
+          //Console.Write("\n  content is {0}\n", msg.content);
           serverProcessMessage(msg);
           if (msg.content == "closeReceiver")
             break;

@@ -49,6 +49,5 @@ C:\Users\lxinghe\Downloads\CommPrototype\SimpleServer\bin\Debug\Sender.pdb
 C:\Users\lxinghe\Downloads\CommPrototype\SimpleServer\bin\Debug\Utilities.pdb
 C:\Users\lxinghe\Downloads\CommPrototype\SimpleServer\bin\Debug\CommService.pdb
 C:\Users\lxinghe\Downloads\CommPrototype\SimpleServer\bin\Debug\BlockingQueue.pdb
-C:\Users\lxinghe\Downloads\CommPrototype\SimpleServer\obj\Debug\SimpleServer.csprojResolveAssemblyReference.cache
 C:\Users\lxinghe\Downloads\CommPrototype\SimpleServer\obj\Debug\SimpleServer.exe
 C:\Users\lxinghe\Downloads\CommPrototype\SimpleServer\obj\Debug\SimpleServer.pdb

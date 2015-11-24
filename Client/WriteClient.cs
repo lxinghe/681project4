@@ -38,6 +38,7 @@ using System.Threading;
 using System.Xml;
 using System.Xml.Linq;
 using static System.Console;
+using System.Diagnostics;
 
 namespace Project4
 {
@@ -49,10 +50,11 @@ namespace Project4
   //                       /R http://localhost:8080/CommService
   //   Either one or both may be ommitted
 
-  class Client
-  {
+  class WriteClient
+    {
     string localUrl { get; set; } = "http://localhost:8081/CommService";
     string remoteUrl { get; set; } = "http://localhost:8080/CommService";
+        string logMessage { get; set; } = "Yes";
 
     //----< retrieve urls from the CommandLine if there are any >--------
 
@@ -62,23 +64,28 @@ namespace Project4
         return;
       localUrl = Util.processCommandLineForLocal(args, localUrl);
       remoteUrl = Util.processCommandLineForRemote(args, remoteUrl);
+	  logMessage = Util.processCommandLineForLog(args, logMessage);
     }
     static void Main(string[] args)
     {
-      Console.Write("\n  starting CommService client");
+      Console.Write("\n  starting Write Client for requirement #5&#6");
       Console.Write("\n =============================\n");
 
-      Console.Title = "Client #1";
+      Console.Title = "WriteClient";
 
-      Client clnt = new Client();
+      WriteClient clnt = new WriteClient();
       clnt.processCommandLine(args);
-
+	  Console.Title = "WriteClient";
+      
       string localPort = Util.urlPort(clnt.localUrl);
       string localAddr = Util.urlAddress(clnt.localUrl);
       Receiver rcvr = new Receiver(localPort, localAddr);
       if (rcvr.StartService())
       {
-        rcvr.doService(rcvr.defaultServiceAction());
+		if(clnt.logMessage == "Yes")
+			rcvr.doService(rcvr.defaultServiceAction());
+		else
+			rcvr.doService(rcvr.defaultServiceAction2());
       }
 
       Sender sndr = new Sender(clnt.localUrl);  // Sender needs localUrl for start message
@@ -99,15 +106,21 @@ namespace Project4
       }
 	  
 	  XmlDocument doc = new XmlDocument();
-      doc.Load("test.xml");
+      doc.Load("writeClientTest.xml");
 	  XmlNodeList xmlnode = doc.GetElementsByTagName("Message");
-	  
-     while (true)
-      {
-		for (int i = 0; i < xmlnode.Count; i++)
+	  Stopwatch watch = new Stopwatch();
+
+      watch.Start();//start watch
+       while (true)
+      { 
+		msg = new Message();
+		msg.fromUrl = clnt.localUrl;
+		msg.toUrl = clnt.remoteUrl;
+		for (int i = 0; i < xmlnode.Count; i++)//read and send message
 		{
 			msg.content = "<?xml version=\"1.0\" encoding=\"utf - 8\" standalone=\"yes\"?>" + xmlnode[i].OuterXml;
-			Console.Write("\n  sending {0}", msg.content);
+			if(clnt.logMessage == "Yes")
+				Console.Write("\n  sending {0}\n", msg.content);
 			if (!sndr.sendMessage(msg))
 				return;
 			Thread.Sleep(100);
@@ -119,13 +132,18 @@ namespace Project4
 
       // Wait for user to press a key to quit.
       // Ensures that client has gotten all server replies.
+	  watch.Stop();//stop watch
+	  string time = watch.ElapsedMilliseconds.ToString();
+	  Console.Write("Elapsed time: " + time + " millionsecondns\n\n");//print out time elapsed
       Util.waitForUser();
+	  
 
       // shut down this client's Receiver and Sender by sending close messages
       rcvr.shutDown();
       sndr.shutdown();
 
       Console.Write("\n\n");
+	  
     }
   }
 }

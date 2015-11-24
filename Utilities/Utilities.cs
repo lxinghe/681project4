@@ -56,6 +56,18 @@ namespace Project4
       }
       return remoteUrl;
     }
+	
+	static public string processCommandLineForLog(string[] args, string remoteUrl)
+    {
+      for (int i = 0; i < args.Length; ++i)
+      {
+        if ((args.Length > i + 1) && (args[i] == "/log" || args[i] == "/Log"))
+        {
+          remoteUrl = args[i + 1];
+        }
+      }
+      return remoteUrl;
+    }
 
     //----< helper functions to construct url strings >------------------
     public static string makeUrl(string address, string port)

@@ -106,7 +106,7 @@ namespace Project4
 		return reply;
 	}
 	
-	public List<DateTime> getDTS(XDocument mesg){
+	public List<DateTime> getDTS(XDocument mesg){//used to parse datetimes
 		List<DateTime> dts = new List<DateTime>();
 		int year, month, date, hour, min, sec;
 		XElement element = mesg.Element("Message").Element("Year1");
@@ -210,15 +210,15 @@ namespace Project4
 		return key;
 	}
 	
-	public int deleteData(XDocument message)//method used to do value deletion
+	public string deleteData(XDocument message)//method used to do value deletion
 	{
 		XElement element = message.Element("Message").Element("Key");
-		int key = Int32.Parse(element.Value);
-		db.delete(key);
-		return key;
+		db.delete(Int32.Parse(element.Value));
+		element = message.Element("Message").Element("KeyType");
+		return this.returnDBAsString(element.Value);
 	}
 	
-    public int addValue(XDocument message)//method used to do addition of key/value pairs
+    public string addValue(XDocument message)//method used to do addition of key/value pairs
 	{
 	  XElement element = message.Element("Message").Element("Name");
 	  DBElement<int, string> elem = new DBElement<int, string>();
@@ -232,20 +232,41 @@ namespace Project4
               select x;
 	  foreach (var child in p)//add children's keys
 		elem.children.Add(Int32.Parse(child.Value));
-	  element = message.Element("Message").Element("Payload");//add payload
-      elem.payload = element.Value;
-	  element = message.Element("Message").Element("KeyType");
-	  int key = -1;
+		element = message.Element("Message").Element("Payload");//add payload
+		elem.payload = element.Value;
+		element = message.Element("Message").Element("KeyType");
+	  
 	  if(element.Value.Equals("int")){
 		  element = message.Element("Message").Element("Key");
-		  key = Int32.Parse(element.Value);
-		  db.insert(key, elem);
+		  db.insert(Int32.Parse(element.Value), elem);
+		  return this.returnDBAsString("int");
 	  }
 	  else{
 		element = message.Element("Message").Element("Key");
 		dbString.insert(element.Value, elem);
+		return this.returnDBAsString("string");
 	  }
-      return key;
+      
+	}
+	
+	public string returnDBAsString(string type){
+		string str = "";
+		DBElement<int, string> elem = new DBElement<int, string>();
+		if(type=="int"){
+			foreach(int key in db.Keys()){	
+				db.getValue(key, out elem);	  
+				str += ("\n\n  -- key = "+key+" --");
+				str += (elem.showElement<int, string>() + "\n\n");
+			}
+		}
+		else{
+			foreach(string key in dbString.Keys()){	
+				dbString.getValue(key, out elem);	  
+				str += ("\n\n  -- key = "+key+" --");
+				str += (elem.showElement<int, string>() + "\n\n");
+			}
+		}
+		return str;
 	}
     
     public void showDB()
@@ -302,35 +323,32 @@ namespace Project4
                XDocument xml = XDocument.Parse(msg.content);
 			   XElement element = xml.Element("Message").Element("Type");
 			   switch(element.Value){
-					case "Add":
-						key = srvr.addValue(xml);
-						if(key>=0)
-							testMsg.content = "Value with key "+ key +" has been added";
-						else{
-							element = xml.Element("Message").Element("Key");
-							testMsg.content = "Value with key "+ element.Value +" has been added";
-						}
+					case "Add"://add key/value pair
+                          testMsg.content = srvr.addValue(xml);
 						break;
-					case "Delete":
-						key = srvr.deleteData(xml);
-						testMsg.content = "Value with key "+ key +" has been deleted";
+					case "Delete"://delete key/value pair
+						element = xml.Element("Message").Element("Key");
+						testMsg.content = "Value with key "+ element.Value +" has been deleted\n\n";
+						testMsg.content += srvr.deleteData(xml);
+						
 						break;
-					case "Edit":
+					case "Edit"://edit value
 						key = srvr.editValue(xml);
 						if(key<0)
 							testMsg.content = "Value cannot be found";
 						else
 							testMsg.content = "Value with key "+ key +" has be edited";
+							testMsg.content += srvr.returnDBAsString("int");
                           break;
-					case "ToXML":
+					case "ToXML"://persist database to xml
 						srvr.persistDB(xml);
 						testMsg.content = "The content of database has been converted to XML and saved in Test.xml";
 						break;
-					case "RecoverDB":
+					case "RecoverDB"://recover database from xml
 						srvr.recoverDB(xml);
 						testMsg.content = "The database has been recover from a XML file";
 						break;
-					case "Query":
+					case "Query"://handling a query
 						testMsg.content = srvr.query(xml);
 						break;
 					default:
@@ -385,7 +403,7 @@ namespace Project4
       }                                // so the call doesn't block.
       Util.waitForUser(); 
 	  
-	  srvr.showDB();
+	  //srvr.showDB();
     }
   }
 }

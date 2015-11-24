@@ -7,6 +7,7 @@
 //  Author:       Jim Fawcett, CST 2-187, Syracuse University              //
 //                (315) 443-3948, jfawcett@twcny.rr.com                    //
 /////////////////////////////////////////////////////////////////////////////
+//Modified by Xinghe Lu 2015/11/22
 /*
  *   Module Operations
  *   -----------------

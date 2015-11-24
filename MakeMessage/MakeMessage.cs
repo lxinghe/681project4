@@ -3,13 +3,10 @@
 // ver 1.0                                                             //
 // Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4    //
 /////////////////////////////////////////////////////////////////////////
+
 /*
- * Purpose:
- *----------
- * This is a placeholder for application specific message construction
- *
- * Additions to C# Console Wizard generated code:
- * - references to ICommService and Utilities
+ Developed by Xinghe Lu
+ Date: 11/22/2015
  */
 /*
  * Maintenance History:

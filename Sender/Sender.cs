@@ -1,12 +1,7 @@
-﻿/////////////////////////////////////////////////////////////////////////
-// Sender.cs - CommService Sender connects and sends messages          //
-// ver 2.1                                                             //
-// Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4    //
-/////////////////////////////////////////////////////////////////////////
+﻿
 /*
- * - has a dedicated sendThread that reads from application queue,
- *   looks at message.toUrl and finds or creates a proxy for that
- *   destination, then sends message
+ By Xinghe Lu
+ Original file from Jim Fawcett, CSE681 - Software Modeling and Analysis, Project #4
  */
 /*
  * Additions to C# Console Wizard generated code:
